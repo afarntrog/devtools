@@ -187,6 +187,8 @@ def run_agent(query: str):
         # Set up Langfuse telemetry (optional - gracefully degrades if not configured)
         telemetry_enabled = _setup_langfuse_telemetry()
         trace_attributes = _get_trace_attributes() if telemetry_enabled else {}
+        print('print: trace_attributes')
+        print(trace_attributes)
         
         # Get tools and create model
         tools = _get_all_tools()
