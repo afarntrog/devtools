@@ -58,7 +58,7 @@ runs:
     - name: Checkout devtools
       uses: actions/checkout@v5
       with:
-        repository: strands-agents/devtools
+        repository: afarntrog/devtools
         ref: secret_id_optional
         sparse-checkout: |
           strands-command/scripts
