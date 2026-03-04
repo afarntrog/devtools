@@ -1,8 +1,11 @@
-# Core evaluation framework
-strands-agents-evals>=0.1.1
+# Core evaluation framework (includes LangfuseProvider)
+strands-agents-evals>=0.1.8
 
-# Langfuse for fetching sessions
+# Langfuse SDK (required by LangfuseProvider)
 langfuse>=3.0.0
+
+# Retry logic (required by LangfuseProvider)
+tenacity>=8.0.0
 
 # OpenTelemetry SDK (required for package metadata lookup)
 opentelemetry-sdk>=1.20.0
