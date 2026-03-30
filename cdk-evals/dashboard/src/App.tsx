@@ -9,6 +9,7 @@ import ScoreTrendsPage from "./pages/ScoreTrendsPage";
 import AgentProgressPage from "./pages/AgentProgressPage";
 import SettingsPage from "./pages/SettingsPage";
 import InsightsPage from "./pages/InsightsPage";
+import ChatWidget from "./components/ChatWidget";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/insights" element={<InsightsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Routes>
+        <ChatWidget />
       </EvaluationProvider>
     </HashRouter>
   );

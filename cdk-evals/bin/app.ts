@@ -2,6 +2,7 @@
 import "source-map-support/register";
 import * as dotenv from "dotenv";
 import * as cdk from "aws-cdk-lib";
+import { ChatbotStack } from "../lib/chatbot-stack";
 import { DashboardStack } from "../lib/dashboard-stack";
 import { EvalPipelineStack } from "../lib/eval-pipeline-stack";
 
@@ -18,13 +19,25 @@ const env = {
   region: "us-east-1",
 };
 
+// Chatbot Stack: EC2 + Elastic IP for Strands Agent backend (default VPC)
+const chatbotStack = new ChatbotStack(app, "ChatbotStack", {
+  env,
+  description: "Strands Evals Chatbot - EC2 + Elastic IP",
+  tags: {
+    Project: "strands-evals-dashboard",
+  },
+  knowledgeBaseId: process.env.KNOWLEDGE_BASE_ID!,
+});
+
 // Dashboard Stack: S3 + CloudFront + Lambda@Edge for basic auth
+// Routes /api/v1/run/* to chatbot EC2 via CloudFront behavior
 const dashboardStack = new DashboardStack(app, "DashboardStack", {
   env,
   description: "Strands Evals Dashboard - S3, CloudFront, and Lambda@Edge",
   tags: {
     Project: "strands-evals-dashboard",
   },
+  chatbotOriginDomain: chatbotStack.publicIp,
 });
 
 // Eval Pipeline Stack: SQS + Lambda + Secrets Manager

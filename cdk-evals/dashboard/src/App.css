@@ -1,1 +1,9 @@
 /* App-specific styles - Tailwind handles most styling */
+
+langflow-chat {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  z-index: 9999 !important;
+}

@@ -22,6 +22,10 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: true,
         },
+        '/api/v1/run': {
+          target: 'http://localhost:8000',
+          changeOrigin: true,
+        },
       },
     },
   }

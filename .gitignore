@@ -30,3 +30,8 @@ package-lock.json
 
 # Environment variables (contains secrets)
 .env
+
+.playwright-mcp/
+*.pyc
+*.sqlite3
+sessions.db

@@ -9,6 +9,10 @@ import * as fs from "fs";
 import * as path from "path";
 import { execSync } from "child_process";
 
+export interface DashboardStackProps extends cdk.StackProps {
+  chatbotOriginDomain?: string;
+}
+
 const SECRET_NAME = "strands-evals/dashboard-auth";
 
 /**
@@ -41,7 +45,7 @@ export class DashboardStack extends cdk.Stack {
   public readonly bucket: s3.Bucket;
   public readonly distribution: cloudfront.Distribution;
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: DashboardStackProps) {
     super(scope, id, props);
 
     // S3 Bucket for dashboard static assets
@@ -79,12 +83,28 @@ export class DashboardStack extends cdk.Stack {
       }
     );
 
+    // Optional: CloudFront behavior to route API requests to chatbot ALB
+    const additionalBehaviors: Record<string, cloudfront.BehaviorOptions> = {};
+    if (props?.chatbotOriginDomain) {
+      additionalBehaviors["/api/v1/run/*"] = {
+        origin: new origins.HttpOrigin(props.chatbotOriginDomain, {
+          httpPort: 8000,
+          protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+        }),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
+      };
+    }
+
     // CloudFront Distribution with Origin Access Control
     this.distribution = new cloudfront.Distribution(this, "Distribution", {
       comment: "Strands Evals Dashboard",
       defaultRootObject: "index.html",
       httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
+      additionalBehaviors,
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(this.bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

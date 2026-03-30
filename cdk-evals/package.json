@@ -13,6 +13,7 @@
     "deploy": "cdk deploy --all",
     "deploy:dashboard": "cdk deploy DashboardStack",
     "deploy:pipeline": "cdk deploy EvalPipelineStack",
+    "deploy:chatbot": "cdk deploy ChatbotStack",
     "destroy": "cdk destroy --all"
   },
   "devDependencies": {

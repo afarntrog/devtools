@@ -1,0 +1,8 @@
+django>=5.0
+django-ninja>=1.0
+django-cors-headers>=4.0
+strands-agents
+strands-agents-tools
+strands-sqlite-session-manager @ git+https://github.com/afarntrog/strands-sqlite-session-manager
+boto3
+python-dotenv
